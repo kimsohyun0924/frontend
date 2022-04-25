@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+* {
+    box-sizing:border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+}
+
+hr {
+    width : 100%;
+    height: 2px;
+    background-color: grey;
+}
+
+.home, .contact, .about{
+    display: flex;
+    height: 90vh;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.serviceCreate {
+    width : 85%;
+    height: 200px;
+    border : 1px solid gray;
+    margin: 40px 90px 40px 90px
+}
+
+.create {
+    width : 100%;
+    padding: 15px 15px 15px 15px;
+    background-color : #D7DDE4;
+}
+
+.dbbtn {
+    color : white;
+    background-color: orange;
+}
+
+.serviceState {
+    width : 85%;
+    height: 200px;
+    border : 1px solid gray;
+    margin: 40px 90px 40px 90px
+
+}
+
+.state {
+    width : 100%;
+    padding: 15px 15px 15px 15px;
+    background-color : #D7DDE4;
+}
+
+.bottom {
+    display : flex;
+    justify-content: center;
+    
+}
+
+.metric {
+    width : 40%;
+    height: 200px;
+    border : 1px solid gray;
+    margin-right: 5%;
+
+}
+
+.m {
+    width : 100%;
+    padding: 15px 15px 15px 15px;
+    background-color : #D7DDE4;
+}
+
+.event {
+    width : 40%;
+    height: 200px;
+    background-color: brown;
+    border : 1px solid gray;
+
+}
