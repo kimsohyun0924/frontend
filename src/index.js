@@ -4,8 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-
-//페이지에서 ID가 root인 것을 찾아서 react App을 그 안에다가 넣겠다....
 ReactDOM.render(
   <React.StrictMode>
     <App />

@@ -2,18 +2,13 @@ import React from 'react';
 import * as BsIcons from 'react-icons/bs';
 export const SidebarData = [
   {
-    title: '검사하기',
-    path: '/ToExamine',
+    title: '대시보드',
+    path: '/Dashboard',
     cName: 'nav-text'
   },
   {
-    title: 'Home',
-    path: '/',
-    cName: 'nav-text'
-  },
-  {
-    title: 'About',
-    path: '/About',
+    title: 'DB Server',
+    path: '/DBserver',
     cName: 'nav-text'
   },
   {
