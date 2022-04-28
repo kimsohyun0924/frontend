@@ -106,28 +106,49 @@
 // export default App;
 
 
+// import './App.css';
+// import Navbar from './components/Navbar';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import Dashboard from './pages/Dashboard';
+// import Home from './pages/Home';
+// import DBserver from './pages/DBserver';
+// import Contact from './pages/Contact';
+// function App() {
+//   return (
+//     <>
+//     <Router>
+//       <Navbar />
+//       <Routes>
+//         <Route path="/" element={<Home/>} />
+//         <Route path="/Dashboard" element={<Dashboard/>} />
+//         <Route path="/DBserver" element={<DBserver/>} />
+//         <Route path="/Contact" element={<Contact/>} />
+//       </Routes>
+//     </Router>
+//     </>
+//   );
+// }
+// export default App;
+
+import TopSection from "./components/TopSection";
 import './App.css';
-import Navbar from './components/Navbar';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
-import Home from './pages/Home';
-import DBserver from './pages/DBserver';
-import Contact from './pages/Contact';
+import LeftColumn from "./components/LeftColumn";
+
 function App() {
   return (
     <>
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home/>} />
-        <Route path="/Dashboard" element={<Dashboard/>} />
-        <Route path="/DBserver" element={<DBserver/>} />
-        <Route path="/Contact" element={<Contact/>} />
-      </Routes>
-    </Router>
+      <div className="wrapper">
+        <div>
+          <TopSection />
+        </div>
+        <div>
+          <LeftColumn />
+        </div>
+      </div> 
     </>
   );
 }
+
 export default App;
 
 
