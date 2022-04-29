@@ -133,18 +133,15 @@
 import TopSection from "./components/TopSection";
 import './App.css';
 import LeftColumn from "./components/LeftColumn";
+import Contents from "./components/Contents";
+import ApiMgmt from "./components/ApiMgmt";
 
 function App() {
   return (
     <>
-      <div className="wrapper">
-        <div>
-          <TopSection />
-        </div>
-        <div>
-          <LeftColumn />
-        </div>
-      </div> 
+    <TopSection />
+    <LeftColumn />
+    <ApiMgmt />
     </>
   );
 }

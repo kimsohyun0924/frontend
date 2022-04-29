@@ -21,7 +21,6 @@ function LeftColumn() {
                                     <a href="#">
                                         <span>{item.title}</span>
                                     </a>
-                                    <span>{item.title}</span>
                                 </li>  
                             );
                         })}
