@@ -23,7 +23,7 @@ function Contents() {
                     <div className="top">
                         <div className="toptop">
                             <span>
-                                <a href="" class="cprod_server" style={{fontSize:"13px"}}>API Gateway</a>
+                                <a href="" className="cprod_server" style={{fontSize:"13px"}}>API Gateway</a>
                                 &gt;
                                 <a href="" style={{fontSize:"14px", padding:"2px 0px 0px 5px"}}>My APIs</a>
                             </span>
@@ -53,49 +53,49 @@ function Contents() {
                             <thead>
                                 <tr>
                                     <th id="allchkbkox" style={{width:"36px"}}>
-                                        <label id="labelchk" class="chkwrap">
-                                            <input id="allchk" type="checkbox" class="chkbox" onclick="chkAll(this,'contentsList')" />      
+                                        <label id="labelchk" className="chkwrap">
+                                            <input id="allchk" type="checkbox" className="chkbox"/>      
                                         </label>
                                     </th>
                                     <th style={{fontSize : "12px",  fontWeight: "normal"}}>
                                         <span>
                                             이름
-                                            <img class="sort_img" src="/Table_Sort_Down.svg" alt="" style={{margin:"0px 0px 0px 6px"}}/>
+                                            <img className="sort_img" src="/Table_Sort_Down.svg" alt="" style={{margin:"0px 0px 0px 6px"}}/>
                                         </span>
                                     </th>
                                     <th style={{fontSize : "12px",  fontWeight: "normal"}}>
                                         <span>
                                             설명
-                                            <img class="sort_img" src="/Table_Sort_Down.svg" alt="" style={{margin:"0px 0px 0px 6px"}}/>
+                                            <img className="sort_img" src="/Table_Sort_Down.svg" alt="" style={{margin:"0px 0px 0px 6px"}}/>
                                         </span>
                                     </th>
                                     <th style={{fontSize : "12px",  fontWeight: "normal"}}>
                                         <span>
                                             ID
-                                            <img class="sort_img" src="/Table_Sort_Down.svg" alt="" style={{margin:"0px 0px 0px 6px"}}/>
+                                            <img className="sort_img" src="/Table_Sort_Down.svg" alt="" style={{margin:"0px 0px 0px 6px"}}/>
                                         </span>
                                     </th>
                                     <th style={{fontSize : "12px",  fontWeight: "normal"}}>
                                         <span>
                                             생성 일시
-                                            <img class="sort_img" src="/Table_Sort_Down.svg" alt="" style={{margin:"0px 0px 0px 6px"}}/>
+                                            <img className="sort_img" src="/Table_Sort_Down.svg" alt="" style={{margin:"0px 0px 0px 6px"}}/>
                                         </span>
                                     </th>              
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="first ac" id="text_num">
-                                        <label id="list_check" class="chkwrap lishchkbox">
-                                            <input id="chkmultich" type="checkbox" name="contentsList"class="chkbox"/>      
+                                    <td className="first ac" id="text_num">
+                                        <label id="list_check" className="chkwrap lishchkbox">
+                                            <input id="chkmultich" type="checkbox" name="contentsList"className="chkbox"/>      
                                         </label>
                                     </td>
                                     <td>PetStore</td><td>Your first API with KT Cloud.</td><td>id_1</td><td>2022/04/29 15:20:20</td>
                                 </tr>
                                 <tr>
-                                    <td class="first ac" id="text_num">
-                                        <label id="list_check" class="chkwrap lishchkbox">
-                                            <input id="chkmultich" type="checkbox" name="contentsList"class="chkbox"/>      
+                                    <td className="first ac" id="text_num">
+                                        <label id="list_check" className="chkwrap lishchkbox">
+                                            <input id="chkmultich" type="checkbox" name="contentsList"className="chkbox"/>      
                                         </label>
                                     </td>
                                     <td>myapi</td><td>Your api hi</td><td>id_2</td><td>2022/04/19 16:20:20</td>

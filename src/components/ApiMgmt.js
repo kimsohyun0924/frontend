@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { purple } from '@mui/material/colors';
-import Button from '@mui/material/Button';
+import { createTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import ResourceStateButton from "./ResourceStateButton";
+import ResourceCreate from './ResourceCreate';
 
 const theme = createTheme({
     palette: {
@@ -31,7 +31,7 @@ function TabPanel(props) {
         {...other}
       >
         {value === index && (
-          <Box sx={{ p: 3 }}>
+          <Box sx={{ p: 3 , padding:'10px 0px 10px 0px'}}>
             <Typography>{children}</Typography>
           </Box>
         )}
@@ -69,7 +69,7 @@ function ApiMgmt() {
                     <div className="top">
                         <div className="toptop">
                             <span>
-                                <a href="" class="cprod_server" style={{fontSize:"13px"}}>API Gateway</a>
+                                <a href="" className="cprod_server" style={{fontSize:"13px"}}>API Gateway</a>
                                 &gt;
                                 <a href="" style={{fontSize:"14px", padding:"2px 0px 0px 5px"}}>My APIs</a>
                             </span>
@@ -92,7 +92,12 @@ function ApiMgmt() {
                                 </Tabs>
                             </Box>
                             <TabPanel value={value} index={0}>
-                                Item One
+                                <div>
+                                    <ResourceStateButton/>
+                                </div>
+                                <div>
+                                    <ResourceCreate/>
+                                </div>
                             </TabPanel>
                             <TabPanel value={value} index={1}>
                                 Item Two
@@ -102,7 +107,7 @@ function ApiMgmt() {
                             </TabPanel>
                             <TabPanel value={value} index={3}>
                                 Item Four
-                            </TabPanel>
+                            </TabPanel>   
                         </Box>
                     </div>
                     <div className="bottom">

@@ -17,10 +17,10 @@ function LeftColumn() {
                     <ul className="menu-bar">
                         {SidebarData.map((item, index) => {
                             return (
-                                <li>
-                                    <a href="#">
+                                <li key={index} className={item.cName}>
+                                    {/* <Link to={item.path}> */}
                                         <span>{item.title}</span>
-                                    </a>
+                                    {/* </Link> */}
                                 </li>  
                             );
                         })}
