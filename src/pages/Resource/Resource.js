@@ -7,10 +7,12 @@ import { useLocation } from "react-router";
 
 
 const ResourceContainer = styled.div`
-  
+  padding: 5px 0px 0px 0px;
 `;  
 
 export default function Resource(props) {
+
+  console.log(props);
 
   const serviceInfo = props.serviceInfo;
   const serviceId = serviceInfo.id;

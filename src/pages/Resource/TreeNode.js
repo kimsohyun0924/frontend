@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import styled, { css, ThemeProvider } from 'styled-components';
+import React, { useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
+import styled, { css, ThemeProvider } from 'styled-components';
+
+import Method from 'pages/Method/Method';
+import MethodUpdate from 'pages/Method/MethodUpdate';
+
+import ResourceCreate from './ResourceCreate';
+import Button from 'components/Button';
+import ModalAPIDelete from 'components/ModalAPIDelete';
+
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeView from '@mui/lab/TreeView';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem, { useTreeItem, treeItemClasses} from '@mui/lab/TreeItem';
-import clsx from 'clsx';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import ResourceCreate from './ResourceCreate';
-import Button from 'components/Button';
-import Method from 'pages/Method/Method';
-import ModalApiDelete from 'components/ModalApiDelete';
-import MethodUpdate from 'pages/Method/MethodUpdate';
 
 
 const AllDiv = styled.div`
@@ -65,6 +69,45 @@ const Content = styled.div`
   width: 100%;
   padding: 20px 20px 0px 20px;
   /* background:pink; */
+`;
+
+const TestDiv = styled.div`
+  height: 35px;
+`;
+
+const TestDiv2 = styled.div`
+  display: flex;
+  font-weight: 500 !important;
+  font-family: 'Noto Sans KR', sans-serif !important;
+  font-size: 15px !important;
+  border-bottom: 1px solid #e2e2e2;
+  align-items: center;
+
+   ${props => props.label === 'GET' &&
+      css`
+      color: royalblue;
+      `
+    }
+    ${props => props.label === 'POST' &&
+      css`
+      color: green;
+      `
+    }
+    ${props => props.label === 'PUT' &&
+      css`
+      color: brown;
+      `
+    }
+    ${props => props.label === 'DELETE' &&
+      css`
+      color: red;
+      `
+    }
+      ${props => props.label === 'ANY' &&
+      css`
+      color: orange;
+      `
+    }
 `;
 
 export default function RecursiveTreeView(props) {
@@ -125,7 +168,7 @@ export default function RecursiveTreeView(props) {
         // navigate('/api/operation/method');
       }
 
-      console.log(nodeId)
+      // console.log(nodeId)
       setLabel(label);
       setResourceId(nodeId);
       // console.log();
@@ -133,7 +176,7 @@ export default function RecursiveTreeView(props) {
   
     return (
       // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-      <div
+      <TestDiv
         className={clsx(className, classes.root, {
           [classes.expanded]: expanded,
           [classes.selected]: selected,
@@ -147,15 +190,16 @@ export default function RecursiveTreeView(props) {
         <div onClick={handleExpansionClick} className={classes.iconContainer}>
           {icon}
         </div>
-        <div
+        <TestDiv2
           onClick={handleSelectionClick}
           component="div"
           className={classes.label}
           value={doc_type}
+          label={label}
         >
           {label}
-        </div>
-      </div>
+        </TestDiv2>
+      </TestDiv>
     );
   });
   
@@ -198,36 +242,37 @@ export default function RecursiveTreeView(props) {
     <TreeItem ContentComponent={CustomContent} {...props} />
   );
 
-  const StyledTreeItem = styled((props) => {
-    // console.log(props);
-    return (
-    <TreeItem ContentComponent={CustomContent} {...props}/>
-    );
-  })(() => ({
-    [`& .${treeItemClasses.content}`]: {
-      height: '35px', 
-    },
-    [`& .${treeItemClasses.label}`]: {
-
-      fontSize: '16px !important',
-      borderBottom: '1px solid #e2e2e2'
-    },
-  }));
+  // const StyledTreeItem = styled((props) => {
+  //   // console.log(props);
+  //   return (
+  //   <TreeItem ContentComponent={CustomContent} {...props}/>
+  //   );
+  // })(() => ({
+  //   [`& .${treeItemClasses.content}`]: {
+  //     height: '35px', 
+  //   },
+  //   [`& .${treeItemClasses.label}`]: {
+  //     fontWeight: '500 !important',
+  //     fontFamily: 'Noto Sans KR, sans-serif !important',
+  //     fontSize: '15px !important',
+  //     borderBottom: '1px solid #e2e2e2'
+  //   },
+  // }));
 
   const renderTree = (nodes) => {
     return(
-    <StyledTreeItem key={nodes.resource_id || nodes.method_id} nodeId={nodes.resource_id || nodes.method_id} label={nodes.path || nodes.method_type} ContentProps={{doc_type : nodes.doc_type}}>
+    <CustomTreeItem key={nodes.resource_id || nodes.method_id} nodeId={nodes.resource_id || nodes.method_id} label={nodes.path || nodes.method_type} ContentProps={{doc_type : nodes.doc_type}}>
       {Array.isArray(nodes.method_list) ? nodes.method_list.map((node) => renderTree3(node)) : null}
       {Array.isArray(nodes.child_resource_list) ? nodes.child_resource_list.map((node) => renderTree(node)) : null}
-    </StyledTreeItem>
+    </CustomTreeItem>
     );
   };  
 
   const renderTree3 = (nodes) => {
     return(
-    <StyledTreeItem key={nodes.method_id} nodeId={nodes.method_id} label={nodes.method_type} doc_type={nodes.doc_type}>
+    <CustomTreeItem key={nodes.method_id} nodeId={nodes.method_id} label={nodes.method_type} doc_type={nodes.doc_type}>
       {Array.isArray(nodes.method_list) ? nodes.method_list.map((node) => renderTree(node)) : null}
-    </StyledTreeItem>
+    </CustomTreeItem>
     );
   };
   
@@ -312,7 +357,7 @@ export default function RecursiveTreeView(props) {
               </Routes> */}
           </ResourceInfoDiv> 
         </ExampleDiv>
-        <ModalApiDelete
+        <ModalAPIDelete
               // title="정말로 삭제하시겠습니까?"
               confirmText="삭제하기"
               cancelText="취소"
@@ -321,15 +366,15 @@ export default function RecursiveTreeView(props) {
               visible={dialog}
               >
               <span style={{fontWeight:"bold"}}>{label}</span><span style={{padding:"0px 0px 0px 10px"}}>리소스를 삭제합니다.</span>
-        </ModalApiDelete> 
-        <ModalApiDelete
+        </ModalAPIDelete> 
+        <ModalAPIDelete
               // title="정말로 삭제하시겠습니까?"
               ConfirmText="확인"
               onConfirm={onCancel}
               visible={faildialog}
               >
               최상위 리소스는 삭제할 수 없습니다.
-        </ModalApiDelete> 
+        </ModalAPIDelete> 
       </AllDiv>     
     </React.Fragment>
   );

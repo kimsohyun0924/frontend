@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled, { css } from "styled-components";
-import ModalApiDelete from './ModalApiDelete';
+import ModalAPIDelete from './ModalAPIDelete';
 
 const MethodDiv = styled.div`
     width: 320px;
@@ -153,19 +153,18 @@ export default function MethodComp(props) {
                 <MethodInfoDiv>
                     <MethodInfoType>
                         <MethodInfoName>엔드포인트</MethodInfoName>
-                        <MethodInfoValue>{methodInfo.method_type} {"/"+methodInfo.url_path}</MethodInfoValue >
+                        <MethodInfoValue>{methodInfo.method_type} {methodInfo.url_path}</MethodInfoValue >
                     </MethodInfoType>
                     <MethodInfoType>
                         <MethodInfoName>API Key 필요</MethodInfoName>
-                            {/* {
-                                methodInfo.requiredApiKey.required? <MethodInfoValue>예</MethodInfoValue> 
+                            {
+                                methodInfo.api_key_using? <MethodInfoValue>예</MethodInfoValue> 
                                 : <MethodInfoValue>아니요</MethodInfoValue>
-                            } */}
-                            <MethodInfoValue>{methodId}</MethodInfoValue>
+                            }
                     </MethodInfoType>
                 </MethodInfoDiv>
             </MethodDiv> 
-            <ModalApiDelete
+            <ModalAPIDelete
                 // title="메서드 삭제"
                 confirmText="삭제하기"
                 cancelText="취소"
@@ -174,7 +173,7 @@ export default function MethodComp(props) {
                 visible={dialog}
                 >
                 <span style={{fontWeight:"bold"}}>{methodInfo.method_type}</span><span style={{padding:"0px 0px 0px 10px"}}>메서드를 삭제합니다.</span>   
-            </ModalApiDelete>     
+            </ModalAPIDelete>     
         </React.Fragment> 
     );
 }

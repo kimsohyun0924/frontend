@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css, ThemeProvider } from "styled-components";
 import axios from 'axios';
 import Button from './Button';
@@ -39,23 +39,40 @@ const TitleDiv = styled.div`
   padding : 10px 0px 30px 0px;
 `;
 
+const ItemDiv = styled.div`
+  display: block;
+  color: #333336;
+  /* padding: 10px 0px 10px 0px; */
+`;
+
 const Item = styled.div`
   display: flex;
-  padding: 0px 0px 20px 0px;
+  align-items: center;
 `;
 
 const ItemName = styled.div`
-  width: 150px;
-  height: 32px;
-  line-height: 32px;
-  font-size: 15px;
+  width: 143px;
+  height: 45px;
+  font-size: 14px;
+  padding: 10px 0px 5px 0px;
 `;
 
 const ItemInput = styled.div`
-    width: 380px;
-    height: 32px;
-    display: flex;
-    align-items: center;
+  display: flex;
+  width: 784px;
+  height: 45px;
+  font-size: 14px;
+  padding: 10px 0px 5px 0px;
+`;
+
+const InputForm = styled.input`
+  width: 400px;
+  height: 30px;
+  font-size: 14px;
+  border: solid 1px #b6b6c3;
+  box-sizing: border-box;
+  color: #333336;
+  padding: 5px 5px 5px 5px;
 `;
 
 const ItemNote = styled.div`
@@ -75,37 +92,27 @@ const ItemNote = styled.div`
   }
 `;
 
-const InputForm = styled.input`
-  width: 380px;
-  height: 32px;
-  border: solid 1px #b6b6c3;
-  background: #ffffff;
-  box-sizing: border-box;
-  font-size: 13px;
-  color: #333333;
-`;
-
-
 const Item2 = styled.div`
   display: flex;
-  padding: 0px 0px 20px 0px;
 `;
 
 const ItemInput2 = styled.div`
-    width: 380px;
-    height: 70px;
-    display: flex;
-    align-items: center;
+  display: flex;
+  width: 784px;
+  height: 90px;
+  font-size: 14px;
+  padding: 10px 0px 5px 0px;
 `;
 
-const InputForm2 = styled.input`
-  width: 380px;
-  height: 70px;
+const InputForm2 = styled.textarea`
+  width: 400px;
+  min-height: 70px;
+  font-size: 14px;
   border: solid 1px #b6b6c3;
-  background: #ffffff;
   box-sizing: border-box;
-  font-size: 13px;
-  color: #333333;
+  color: #333336;
+  padding: 5px 5px 5px 5px;
+  font-family: "Noto Sans KR",sans-serif !important;
 `;
 
 const ButtonGroup = styled.div`
@@ -120,16 +127,24 @@ ModalPopup.defaultProps = {
 
 
 //제목, 내용, 확인 텍스트, 취소 텍스트
-export default function ModalPopup( { title, children, confirmText, cancelText, onCancel, visible, setUpdateDialog, checkedItems } ) {
+export default function ModalPopup( { title,confirmText, cancelText, onCancel, visible, setUpdateDialog, clickData, setClickData } ) {
+
+  const initialState = {
+    "service_id": null,
+    "mem_sq": null,
+    "name": null,
+    "description": null,
+    "root_resource_id": null,
+    "created_at": null,
+    "updated_at": null,
+  }
 
   const [error, setError] = useState(null);
   const [inputs, setInputs] = useState({
-    ApiName: '',
-    ApiExplain: ''
+    ApiName: clickData.name,
+    ApiExplain: clickData.description
   });
-  
   const { ApiName, ApiExplain } = inputs;
-  
   const onChange = e => {
     const { name, value } = e.target;
     setInputs({
@@ -140,16 +155,12 @@ export default function ModalPopup( { title, children, confirmText, cancelText, 
   // console.log(inputs);
 
   const onUpdate = () => {
-    const Api = {
-      ApiName,
-      ApiExplain
-    };
-  
+    //Update API
     const updateApi = async () => {
       try {
         setError(null);
         await axios.put(
-          '/v1.0/g1/paas/Memsq07/apigw/service/'+checkedItems,
+          '/v1.0/g1/paas/Memsq07/apigw/service/'+clickData.service_id,
           {
             api_name: ApiName,
             description: ApiExplain
@@ -160,10 +171,16 @@ export default function ModalPopup( { title, children, confirmText, cancelText, 
       }
     };
     updateApi();
+    setClickData(initialState)
     window.location.reload(true);
     setUpdateDialog(false);
   };
 
+
+  // useEffect(() => {
+
+  // }, [clickData]);
+  
   if (!visible) return null;
   return (
       <DarkBackground>
@@ -171,21 +188,23 @@ export default function ModalPopup( { title, children, confirmText, cancelText, 
               <ImgDiv onClick={onCancel}>
                 <img src={Logo}/>
               </ImgDiv>
-              <TitleDiv>{title}</TitleDiv>
-              <Item>
-                <ItemName>API 이름</ItemName>
+              <TitleDiv><span style={{padding:"0px 10px 0px 0px", fontWeight:"bold"}}>{clickData.name}</span>{title}</TitleDiv>
+              <ItemDiv>
+                <Item>
+                  <ItemName>API 이름</ItemName>
                     <ItemInput>
-                            <InputForm name="ApiName" placeholder=" API 이름을 입력하세요" onChange={onChange} value={ApiName}/>
-                        </ItemInput>
-                        <ItemNote></ItemNote>
-                    </Item>
-                    <Item2>
-                        <ItemName>API 설명</ItemName>
-                        <ItemInput2>
-                            <InputForm2 name="ApiExplain" placeholder=" API 설명을 입력하세요" onChange={onChange} value={ApiExplain}/>
-                        </ItemInput2>
-                        <ItemNote></ItemNote>
-                    </Item2>
+                        <InputForm name="ApiName" placeholder="API 이름을 입력하세요" onChange={onChange} value={ApiName || '' }/>
+                    </ItemInput>
+                </Item>
+              </ItemDiv>
+              <ItemDiv>
+                <Item2>
+                  <ItemName>API 설명</ItemName>
+                  <ItemInput2>
+                      <InputForm2 name="ApiExplain" placeholder="API 설명을 입력하세요" onChange={onChange} value={ApiExplain || ''}/>
+                  </ItemInput2>
+                </Item2>
+              </ItemDiv>
               <ButtonGroup>
                   <ThemeProvider theme={{ palette: { blue: '#141e49', gray: '#495057', pink: '#f06595' }}}>
                     <span style={{padding:"0px 20px 0px 0px"}}><Button size="large" color="gray" line="noline" onClick={onCancel} >{cancelText}</Button></span>

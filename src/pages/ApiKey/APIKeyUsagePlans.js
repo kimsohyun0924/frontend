@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import MainContainer from 'layouts/MainContainer';
-import { PageTitle, PageSubTitle } from 'style/PageStyle';
-import styled, { ThemeProvider } from "styled-components";
-import Button from 'components/Button';
-import TableCompAPIKeyUsagePlan from 'components/TableCompAPIKeyUsagePlan';
-import ModalApiDelete from 'components/ModalApiDelete';
-import ModalUsagePlanConnect from 'components/ModalUsagePlanConnect';
-import MainHeader from 'components/MainHeader';
 import { useLocation } from "react-router";
+import axios from 'axios';
 
+import styled, { ThemeProvider } from "styled-components";
+import { PageTitle, PageSubTitle } from 'style/PageStyle';
+import MainContainer from 'layouts/MainContainer';
+
+import Button from 'components/Button';
+import MainHeader from 'components/MainHeader';
+import ModalAPIDelete from 'components/ModalAPIDelete';
+import ModalAPIKeyUsageConnect from 'components/ModalAPIKeyUsageConnect';
+import TableCompAPIKeyUsagePlan from 'components/TableCompAPIKeyUsagePlan';
 
 const HeadDiv = styled.div`
 `;
@@ -44,9 +45,9 @@ export default function APIKeyUsagePlans() {
   const [createDialog, setCreateDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [DataTemp, setDataTemp] = useState([]);
+  const [DataTemp2, setDataTemp2] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [selectItem, setSelectItem] = useState(null);
   const testData = [
     {
       "name": "api_test1",
@@ -87,48 +88,41 @@ export default function APIKeyUsagePlans() {
     }
   };
 
-  const onCreate = () => {
-      
-    const createAPIKeyUsageConnet = async () => {
-      try {
-        setError(null);
-        await axios.post(
-          '/v1.0/g1/paas/Memsq07/apigw/api-keys/'+state.api_key_id,
-          {
-            usage_plan_id: selectItem
-          }
-        );
-      } catch (e) {
-        setError(e);
-      }
-    
-    };
-    createAPIKeyUsageConnet();
-    window.location.reload(true);
-    setCreateDialog(false);
+  const fetchUsagePlan = async () => {
+    //get UsagePlan
+    try {
+      setError(null);
+      const response = await axios.get(
+        '/v1.0/g1/paas/Memsq07/apigw/usage-plans/'
+      );
+      setDataTemp2(response.data.filter((item) => !(DataTemp.some((i) => i.usage_plan_id === item.usage_plan_id))));
+    } catch (e) {
+      setError(e);
+    }
   };
 
   const onDelete = () => {
     //delete api request
-     const deleteAPIKeyUsagePlanConnect = async () => {
-       try {
-         setError(null);
-         await axios.delete(
-           '/v1.0/g1/paas/Memsq07/apigw/api-keys/'+state.api_key_id+'/'+clickData.usage_plan_id
-         );
-       } catch (e) {
-         setError(e);
-         console.log(error);
-       }
-     };
-     deleteAPIKeyUsagePlanConnect();
-     window.location.reload(true);
-     setDeleteDialog(false);
-   };
+    const deleteAPIKeyUsagePlanConnect = async () => {
+      try {
+        setError(null);
+        await axios.delete(
+          '/v1.0/g1/paas/Memsq07/apigw/api-keys/'+state.api_key_id+'/'+clickData.usage_plan_id
+        );
+      } catch (e) {
+        setError(e);
+        console.log(error);
+      }
+    };
+    deleteAPIKeyUsagePlanConnect();
+    // window.location.reload(true);
+    setDeleteDialog(false);
+  };
 
   useEffect(() => {
     fetchAPIKeyUsagePlan();
-  }, []);
+    fetchUsagePlan();
+  }, [DataTemp]);
 
   return (
     <React.Fragment>
@@ -149,16 +143,17 @@ export default function APIKeyUsagePlans() {
           <TableCompAPIKeyUsagePlan columns={TableHeader} data={DataTemp} clickData={clickData} setClickData={setClickData}/>
         </TableDiv>
       </MainContainer>
-      <ModalUsagePlanConnect
+      <ModalAPIKeyUsageConnect
         title="Usage Plan과 연결합니다."
         confirmText="연결하기"
         cancelText="취소"
-        onCreate={onCreate}
+        state={state}
         onCancel={onCancel}
-        setSelectItem={setSelectItem}
+        setCreateDialog={setCreateDialog}
+        UsageList={DataTemp2}
         visible={createDialog}>
-      </ModalUsagePlanConnect>
-      <ModalApiDelete
+      </ModalAPIKeyUsageConnect>
+      <ModalAPIDelete
         // title="정말로 삭제하시겠습니까?"
         confirmText="삭제하기"
         cancelText="취소"
@@ -166,7 +161,7 @@ export default function APIKeyUsagePlans() {
         onCancel={onCancel}
         visible={deleteDialog}>
         <span style={{fontWeight:"bold"}}>{clickData.name}</span>  <span style={{padding:"0px 0px 0px 15px"}}>Usgae Plan과 연결을 해제합니다.</span>
-      </ModalApiDelete>
+      </ModalAPIDelete>
     </React.Fragment>
   );
 }

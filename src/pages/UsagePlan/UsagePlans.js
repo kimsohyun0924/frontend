@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import MainContainer from 'layouts/MainContainer';
+
 import { PageTitle, PageSubTitle } from 'style/PageStyle';
 import styled, { ThemeProvider } from "styled-components";
+import MainContainer from 'layouts/MainContainer';
+
 import Button from 'components/Button';
-import TableCompUsagePlans from 'components/TableCompUsagePlans';
-import ModalApiDelete from 'components/ModalApiDelete';
-import ModalApiUpdate from 'components/ModalApiUpdate';
 import MainHeader from 'components/MainHeader';
+import TableCompUsagePlans from 'components/TableCompUsagePlans';
+import ModalAPIDelete from 'components/ModalAPIDelete';
+
 
 const HeadDiv = styled.div`
 `;
@@ -76,14 +78,14 @@ export default function UsagePlans() {
   };
 
   const Update = () => {
-    navigate('/usageplans/edit', {state: clickData});
+    navigate('/usageplans/update', {state: clickData});
   };
 
   const Delete = () => {
     setDeleteDialog(true);
   };
 
-  const Stage = () => {
+  const StageConncet = () => {
     navigate('/usageplans/stage', {state: clickData});
   };
 
@@ -94,12 +96,11 @@ export default function UsagePlans() {
   };
 
   const fetchUsagePlans = async () => {
-    //get UsagePlan
+    //Get UsagePlan
     try {
       setError(null);
-
       const response = await axios.get(
-        '/v1.0/g1/paas/Memsq07/apigw/usage-plans/'
+        '/v1.0/g1/paas/Memsq07/apigw/usage-plans'
       );
       setDataTemp(response.data); // 데이터는 response.data)
       // console.log(response.data);
@@ -109,7 +110,7 @@ export default function UsagePlans() {
   };
 
   const onDelete = () => {
-   //delete UsagePlan
+   //Delete UsagePlan
     const deleteUsagePlan = async () => {
       try {
         setError(null);
@@ -122,15 +123,13 @@ export default function UsagePlans() {
       }
     };
     deleteUsagePlan();
-    window.location.reload(true);
+    // window.location.reload(true);
     setDeleteDialog(false);
   };
 
-
   useEffect(() => {
     fetchUsagePlans();
-  }, []);
-
+  }, [DataTemp]);
 
   return (
     <React.Fragment>
@@ -145,14 +144,14 @@ export default function UsagePlans() {
             <span style={{padding: "0px 20px 0px 0px"}}><Button size="small" line="line" action={Create}>Usage Plan 생성</Button></span>
             <span style={{padding: "0px 10px 0px 0px"}}><Button size="small" line="outline" onClick={Update}>변경</Button></span>
             <span style={{padding: "0px 10px 0px 0px"}}><Button size="small" line="outline" onClick={Delete}>삭제</Button></span>
-            <Button size="small" line="outline" onClick={Stage}>연결된 Stage</Button>
+            <Button size="small" line="outline" onClick={StageConncet}>연결된 Stage</Button>
           </ThemeProvider>
         </ButtonDiv>
         <TableDiv>
           <TableCompUsagePlans columns={TableHeader} data={DataTemp} clickData={clickData} setClickData={setClickData}/>
         </TableDiv>
       </MainContainer>
-       <ModalApiDelete
+       <ModalAPIDelete
             // title="정말로 삭제하시겠습니까?"
             confirmText="삭제하기"
             cancelText="취소"
@@ -162,7 +161,7 @@ export default function UsagePlans() {
             visible={deleteDialog}
             >
             <span style={{fontWeight:"bold"}}>{clickData.name}</span><span style={{padding:"0px 0px 0px 10px"}}>Usage Plan을 삭제합니다.</span>
-      </ModalApiDelete>
+      </ModalAPIDelete>
     </React.Fragment>
   );
 }

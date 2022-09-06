@@ -1,21 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled, { css, ThemeProvider } from 'styled-components';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
+import styled, { css, ThemeProvider } from 'styled-components';
+import img2 from "image/Table_Copy.svg";
+
+import StageInfo from "./StageInfo";
+import StageCreate from './StageCreate';
+import StageMethod from "./StageMethod";
+import StageResourceInfo from "./StageResourceInfo";
+
+import Button from 'components/Button';
+import ModalAPIDelete from 'components/ModalAPIDelete';
+
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeView from '@mui/lab/TreeView';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem, { useTreeItem, treeItemClasses} from '@mui/lab/TreeItem';
-import clsx from 'clsx';
-import { useNavigate } from 'react-router-dom';
-import Button from 'components/Button';
-import ModalApiDelete from 'components/ModalApiDelete';
-import StageCreate from './StageCreate';
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import StageInfo from "./StageInfo";
-import StageMethod from "./StageMethod";
-import StageResourceInfo from "./StageResourceInfo";
-
 
 const AllDiv = styled.div`
   width: 100%;
@@ -71,27 +75,74 @@ const Content = styled.div`
 `;
 
 const InvokeurlDiv = styled.div`
+  display: flex;
   background: #eff4fb;
   /* #d9edf7 #d7e3f5 */
   font-size : 15px;
-  font-weight: bold;
-  padding: 15px 20px 15px 20px;
+  font-weight: 500;
+  padding: 10px 15px 10px 15px;
 `;
 
-const CopyButtonDiv = styled.button`
-  margin: 0px 0px 0px 10px;
+const CopyButtonDiv = styled.div`
+  margin: 3px 0px 0px 10px;
   cursor: pointer;
+`;
 
+const TestDiv = styled.div`
+   ${props => props.label === 'GET' &&
+      css`
+      color: royalblue;
+      `
+    }
+    ${props => props.label === 'POST' &&
+      css`
+      color: green;
+      `
+    }
+    ${props => props.label === 'PUT' &&
+      css`
+      color: brown;
+      `
+    }
+    ${props => props.label === 'DELETE' &&
+      css`
+      color: red;
+      `
+    }
+      ${props => props.label === 'ANY' &&
+      css`
+      color: orange;
+      `
+    }
 `;
 
 export default function RecursiveTreeView(props) {
   // console.log(props);
+
+  const testData = {
+    "method_id": "630d60094020810f037c67c3",
+    "url_path": "test_method",
+    "doc_type": "METHOD",
+    "method_type": "GET",
+    "integration_type": "HTTP",
+    "api_key_using": true,
+    "usage_plan_using": true,
+    "replenish_rate": 500,
+    "burst_capacity": 500,
+    "requested_tokens": 1,
+    "backend_url_using": false,
+    "backend_url": null,
+    "created_at": "2022-08-30T09:55:37.218",
+    "updated_at": "2022-08-30T11:14:46.529"
+}
 
   const serviceInfo = props.serviceInfo;
   const [content, setContent] = useState(null);
   const [resourceId, setResourceId] = useState(null);
   const [stageId, setStageId] = useState(null);
   const [label, setLabel] = useState();
+  const [invoke_url, setInvoke_url] = useState(null);
+  const [backend_url, setBackend_url] = useState(null);
   const [resource, setResource] = useState([]);
   const [dialog, setDialog] = useState(false);
   const [error, setError] = useState(null);
@@ -106,6 +157,8 @@ export default function RecursiveTreeView(props) {
       className,
       label,
       doc_type,
+      backend_url,
+      invoke_url,
       nodeId,
       icon: iconProp,
       expansionIcon,
@@ -131,6 +184,11 @@ export default function RecursiveTreeView(props) {
   
     const handleExpansionClick = (event) => {
       handleExpansion(event);
+      console.log(event.target);
+      if(event.target.getAttribute('value') !== "RESOURCE" && event.target.getAttribute('value') !== "METHOD") {
+        setStageId(nodeId);
+        setBackend_url(event.target.getAttribute('value2'));
+      }
     };
   
     const handleSelectionClick = (event) => {
@@ -144,9 +202,12 @@ export default function RecursiveTreeView(props) {
       } 
       else {
         setStageId(nodeId);
+        setBackend_url(event.target.getAttribute('value2'));
         setContent("second");
       }
 
+      // console.log(event.target)
+      setInvoke_url(event.target.getAttribute('value3'));
       setLabel(label);
       setResourceId(nodeId);
     };
@@ -164,14 +225,17 @@ export default function RecursiveTreeView(props) {
         ref={ref}
       >
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-        <div onClick={handleExpansionClick} className={classes.iconContainer}>
+        <div onClick={handleExpansionClick} className={classes.iconContainer} value={doc_type} value2={backend_url}>
           {icon}
         </div>
         <div
           onClick={handleSelectionClick}
           component="div"
           className={classes.label}
+          label={label}
           value={doc_type}
+          value2={backend_url}
+          value3={invoke_url}
         >
           {label}
         </div>
@@ -206,6 +270,10 @@ export default function RecursiveTreeView(props) {
     label: PropTypes.node,
 
     doc_type: PropTypes.node,
+
+    backend_url: PropTypes.node,
+
+    invoke_url: PropTypes.node,
     /**
      * The id of the node.
      */
@@ -228,15 +296,17 @@ export default function RecursiveTreeView(props) {
       height: '35px', 
     },
     [`& .${treeItemClasses.label}`]: {
-      fontSize: '18px !important',
+      fontWeight: '500 !important',
+      fontFamily: 'Noto Sans KR, sans-serif !important',
+      fontSize: '15px !important',
       borderBottom: '1px solid #e2e2e2'
     },
   }));
 
   const renderTree = (nodes) => {
     return (
-          <StyledTreeItem key={nodes.stage_id} nodeId={nodes.stage_id} label={nodes.name} ContentProps={{doc_type : nodes.doc_type}}>
-            { Array.isArray(nodes.stage_snapshot_list) ? nodes.stage_snapshot_list.map((node) => renderTree2(node)) : null }
+          <StyledTreeItem key={nodes.stage_id} nodeId={nodes.stage_id} label={nodes.name} ContentProps={{backend_url: nodes.backend_url, invoke_url: nodes.invoke_url}}>
+            { Array.isArray(nodes.stage_snapshot_list) ? nodes.stage_snapshot_list.map((node) => renderTree3(node.root_resource)) : null }
           </StyledTreeItem> 
     );
   };
@@ -252,7 +322,7 @@ export default function RecursiveTreeView(props) {
 
   const renderTree3 = (nodes) => {
     return (
-          <StyledTreeItem key={nodes.resource_id || nodes.method_id} nodeId={nodes.resource_id || nodes.method_id} label={nodes.path || nodes.method_typ} ContentProps={{doc_type : nodes.doc_type}}>
+          <StyledTreeItem key={nodes.resource_id || nodes.method_id} nodeId={nodes.resource_id || nodes.method_id} label={nodes.path || nodes.method_typ} ContentProps={{doc_type : nodes.doc_type, invoke_url: nodes.invoke_url}}>
             { Array.isArray(nodes.child_resource_list) ? nodes.child_resource_list.map((node) => renderTree3(node)) : null }
             { Array.isArray(nodes.method_list) ? nodes.method_list.map((node) => renderTree4(node)) : null }
           </StyledTreeItem>  
@@ -262,7 +332,7 @@ export default function RecursiveTreeView(props) {
 
   const renderTree4 = (nodes) => {
     return (
-          <StyledTreeItem key={nodes.method_id} nodeId={nodes.method_id} label={nodes.method_type} ContentProps={{doc_type : nodes.doc_type}}>
+          <StyledTreeItem key={nodes.method_id} nodeId={nodes.method_id} label={nodes.method_type} ContentProps={{doc_type : nodes.doc_type, invoke_url: nodes.invoke_url}}>
             {Array.isArray(nodes.method_list) ? nodes.method_list.map((node) => renderTree3(node)) : null}
           </StyledTreeItem> 
     );
@@ -315,16 +385,9 @@ export default function RecursiveTreeView(props) {
 
   const selectComponent = {
     first: <StageCreate serviceInfo={serviceInfo}/>,
-    second: <StageInfo resourceId={resourceId}/>,
+    second: <StageInfo stageId={resourceId} backend_url={backend_url}/>,
     third: <StageResourceInfo resourceId={resourceId}/>,
-    fourth: <StageMethod stageId={stageId} resourceId={resourceId}/>
-   
-      // <InvokeurlDiv>{resourceId}.ktcloud.io
-      //   <CopyToClipboard text={resourceId+".ktcloud.io"} onCopy={()=>alert("주소가 복사되었습니다")}>
-      //     <CopyButtonDiv>주소 복사</CopyButtonDiv>
-      //   </CopyToClipboard>
-      // </InvokeurlDiv>
-    
+    fourth: <StageMethod stageId={stageId} resourceId={resourceId} backend_url={backend_url} testData={testData}/>
   };
 
   return (
@@ -351,15 +414,17 @@ export default function RecursiveTreeView(props) {
           </MenuDiv> 
           <ResourceInfoDiv>
             <PathDiv>{label}</PathDiv>
-            <InvokeurlDiv>{resourceId}.ktcloud.io
-              <CopyToClipboard text={resourceId+".ktcloud.io"} onCopy={()=>alert("주소가 복사되었습니다")}>
-                <CopyButtonDiv>주소 복사</CopyButtonDiv>
+            { invoke_url &&
+            <InvokeurlDiv>Invoke URL : {invoke_url}
+              <CopyToClipboard text={invoke_url} onCopy={()=>alert("주소가 복사되었습니다")}>
+                <CopyButtonDiv><img src={img2}/></CopyButtonDiv>
               </CopyToClipboard>
             </InvokeurlDiv>
+            }
              {content && <Content>{selectComponent[content]}</Content>}
           </ResourceInfoDiv> 
         </ExampleDiv>
-        <ModalApiDelete
+        <ModalAPIDelete
               // title="정말로 삭제하시겠습니까?"
               confirmText="삭제"
               cancelText="취소"
@@ -368,7 +433,7 @@ export default function RecursiveTreeView(props) {
               visible={dialog}
               >
               {label} 정말로 삭제하시겠습니까?
-        </ModalApiDelete> 
+        </ModalAPIDelete> 
       </AllDiv>     
     </React.Fragment>
   );
