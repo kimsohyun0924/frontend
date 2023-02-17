@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import Table from '../component/Table';
+import Table from '../component/Table_mui';
 
 import apis from '../axios/apis';
 
