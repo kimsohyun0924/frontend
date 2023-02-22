@@ -1,4 +1,5 @@
 import index from "./index";
+import createAxios from './api';
 
 const api = {
   async getApiList() {
@@ -10,6 +11,17 @@ const api = {
       .catch((err: any) => {
         return err;
       });
-    }
+    },
+
+    getDbaaSData(url: any, token: any) {
+      return createAxios({
+        url: url,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Auth-Token": token
+        }
+      });
+    },
+    
 }
 export default api;

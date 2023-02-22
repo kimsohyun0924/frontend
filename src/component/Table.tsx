@@ -45,11 +45,11 @@ const TableDiv = styled.table`
 
 const TH = styled.th`
     line-height: 18px;
+    text-align: left;
     vertical-align: middle;
     padding: 10px 10px;
     font-weight: 400;
     font-size: 14px;
-    text-align: left;
 
     &:not(:last-child) {
         background: white url(${TableLine}) right 50% no-repeat;
@@ -58,9 +58,9 @@ const TH = styled.th`
 
 const TD = styled.td`
     line-height: 20px;
+    text-align: left;
     vertical-align: middle;
     padding: 8px 10px;
-    text-align: left;
     font-weight: 400;
     font-size: 14px;
     border-top: 1px solid #ccc;
@@ -161,7 +161,7 @@ export default function Table() {
                     <img src={Table_Search} alt='search' width='16' />
                 </ItemSearch>           
             </ItemInput>  
-            <div style={{border: '1px solid #ccc'}}>
+            <div style={{border: '1px solid #ccc', overflowX:'auto'}}>
                 <TableDiv {...getTableProps()}> 
                     {/* thead - cloumn(테이블의 header부분) */}
                     <thead>
