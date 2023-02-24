@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 
 const MainWrapper = styled.div`
       min-width: 800px;
-      margin-top: 60px;
+      margin-top: 80px;
       margin-left: 280px;
       min-height: calc(100vh - 60px);
       align-items: center;

@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import Table_Search from '../Table_Search.svg';
-import TableLine from '../tableline.png';
+import TableLine from 'tableline.png';
+import Table_Search from 'Table_Search.svg';
 
 //redux-store에 저장되어 있는 data 가져옴
 import { useSelector } from 'react-redux';
 //redux + action
-import { getlist } from '../redux/reducerSlice' 
+import { getlist } from 'redux/reducerSlice';
 //react-table
 import { useTable, useGlobalFilter, useSortBy, usePagination } from "react-table";
 
@@ -74,53 +74,36 @@ const PaginationOptions = styled.div`
   align-items: center;
 `;
 
-//data에 대한 type 선언
-type service = {
-    created_at: string,
-    description: string,
-    name: string,
-    root_resource_id: string,
-    service_id: string,
-    service_status: string,
-    stage_list: string,
-    updated_at: string,
-    user_id: string
-}
-
 //columData, column에 대한 이름과 Header에 쓰일 column 선언 
 const columnData = [
     {
-        accessor: 'created_at',
-        Header: 'created_at',
+        accessor: 'display_name',
+        Header: 'DB Instance 이름',
     },
     {
-        accessor: 'description',
-        Header: 'description',
+        accessor: 'mysqlInfo.mode',
+        Header: '구성 방식',
     },
     {
-        accessor: 'name',
-        Header: 'name',
+        accessor: 'vmInfo[0].vm_flavor',
+        Header: '서버 사양',
     },
     {
-        accessor: 'root_resource_id',
-        Header: 'root_resource_id',
+        accessor: 'storageInfo.volume_type',
+        Header: '스토리지',
     },
     {
-        accessor: 'service_id',
-        Header: 'service_id',
+        accessor: 'zone.id',
+        Header: 'Zone',
 
     },
     { 
-        accessor: 'service_status',
-        Header: 'service_status',
+        accessor: 'create_completed_time',
+        Header: '생성 일시',
     },
     { 
-        accessor: 'updated_at',
-        Header: 'updated_at',
-    },
-    {
-        accessor: 'user_id',
-        Header: 'user_id'
+        accessor: 'dbaas_status',
+        Header: 'DB 상태',
     }
 ]
 

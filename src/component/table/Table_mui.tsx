@@ -13,13 +13,14 @@ import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 
 import styled from 'styled-components';
-import Table_Search from '../Table_Search.svg';
-import TableLine from '../tableline.png';
+import Table_Search from 'Table_Search.svg';
+import TableLine from 'tableline.png';
 
 //redux-store에 저장되어 있는 data 가져옴
 import { useSelector } from 'react-redux';
 //redux + action
-import { getlist } from '../redux/reducerSlice' 
+import { getlist } from 'redux/reducerSlice' 
+import { StringifyOptions } from 'querystring';
 
 const TableHeaderCell = styled(TableCell)`
   line-height: 18px !important;
@@ -58,12 +59,14 @@ const ItemSearch = styled.span`
 `
 
 interface Data {
-    service_id: string;
-    name: string;
-    description: string;
-    user_id: string;
-    service_status: string;
-    created_at : string;
+    display_name: string;
+    mysqlInfo: any;
+    vmInfo: any;
+    storageInfo: any;
+    zone: any;
+    create_completed_time: string;
+    dbaas_status: string;
+    id: string;
 }
 
 interface HeadCell {
@@ -73,28 +76,33 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
     {
-      id: "service_id",
-      label: 'service_id'
+        id: 'display_name',
+        label: 'DB Instance 이름',
     },
     {
-      id: 'name',
-      label: 'name'
+        id: 'mysqlInfo',
+        label: '구성 방식',
     },
     {
-      id: 'description',
-      label: 'description'
+        id: 'vmInfo',
+        label: '서버 사양',
     },
     {
-      id: "user_id",
-      label: 'user_id'
+        id: 'storageInfo',
+        label: '스토리지',
     },
     {
-      id: "service_status",
-      label: 'service_status'
+        id: 'zone',
+        label: 'Zone',
+
     },
-    {
-      id: "created_at",
-      label: 'created_at'
+    { 
+        id: 'create_completed_time',
+        label: '생성 일시',
+    },
+    { 
+        id: 'dbaas_status',
+        label: 'DB 상태',
     }
 ];
 
@@ -193,7 +201,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('created_at');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('display_name');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -294,17 +302,17 @@ export default function EnhancedTable() {
                 <TableBody>
                 {stableSort(data, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                    const isItemSelected = isSelected(row.name);
+                    .map((row: Data, index: number) => {
+                    const isItemSelected = isSelected(row.display_name);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                         <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.name)}
+                        onClick={(event) => handleClick(event, row.display_name)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.service_id}
+                        key={row.id}
                         selected={isItemSelected}
                         >
                         <TableCell padding="checkbox">
@@ -316,14 +324,21 @@ export default function EnhancedTable() {
                             }}
                             />
                         </TableCell>
-                        { headCells && headCells.map((headCell, index) => {
+                        <TableCell align="left">{row.display_name}</TableCell>
+                        <TableCell align="left">{row.mysqlInfo.mode}</TableCell>
+                        { row.vmInfo.length > 0 ? <TableCell align="left">{row.vmInfo[0].vm_flavor}</TableCell>  : <TableCell  align="left"/> }
+                        <TableCell align="left">{row.storageInfo.volume_type}</TableCell>
+                        <TableCell align="left">{row.zone.id}</TableCell>
+                        <TableCell align="left">{row.create_completed_time}</TableCell>
+                        <TableCell align="left">{row.dbaas_status}</TableCell>
+                        {/* { headCells && headCells.map((headCell, index) => {
                             const item = headCell.id;
                             return (
                                 <React.Fragment key={index}>
-                                    <TableCell align="left">{row[item]}</TableCell>
+                                  <TableCell align="left">{row[item]}</TableCell>
                                 </React.Fragment>
                             );
-                            })}
+                            })} */}
                         </TableRow>
                     );
                     })}

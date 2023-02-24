@@ -80,6 +80,7 @@ const SidebarLabel = styled.span`
 const UL = styled.ul<{isopen: any, subnavlength: any}>`
   transition: 0.2s;
   height: 0px;
+  margin: 0;
   
   ${props => props.isopen === 1 && props.subnavlength && 
     css`

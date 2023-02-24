@@ -20,7 +20,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import APIs from './apis';
+import APIs from './list';
 
 const drawerWidth = 240;
 

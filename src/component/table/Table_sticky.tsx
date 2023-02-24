@@ -1,4 +1,4 @@
-// import '../table.css';
+// import './table.css';
 import React, { useMemo } from 'react';
 import { useBlockLayout, useTable } from 'react-table';
 import { useSticky } from 'react-table-sticky';
@@ -8,7 +8,7 @@ import styled from 'styled-components';
 //redux-store에 저장되어 있는 data 가져옴
 import { useSelector } from 'react-redux';
 //redux + action
-import { getlist } from '../redux/reducerSlice'
+import { getlist } from 'redux/reducerSlice'
 
 const columnData = [
     {

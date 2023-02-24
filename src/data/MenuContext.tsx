@@ -1,4 +1,4 @@
-import React, { useReducer, createContext, useContext } from 'react';
+import React, { useReducer, createContext, useContext, Dispatch } from 'react';
 
 const initialValue = {
   menuOpen : true,
@@ -9,19 +9,19 @@ const initialValue = {
   messageBoxContent: "",
   platformId: "d1",
   zoneId : "",
-  tenantId: "",
+  tenantId: "29977b985dfb49adbaea215b5f79d36b",
   tierId: "",
   accessKey: "",
   secretKey: "",
   developMode: "dev",
 }
 
-interface MenuContext {
-    menuOpen?: boolean,
+type MenuContext = {
+    menuOpen: boolean,
     token?: string,
     dbaasStatus?: string,
     totalVM?: number,
-    messageBoxFlag?: boolean,
+    messageBoxFlag: boolean,
     messageBoxContent?: string,
     platformId?: string,
     zoneId?: string,
@@ -29,12 +29,15 @@ interface MenuContext {
     tierId?: string,
     accessKey?: string,
     secretKey?: string,
-    developMode?: string,
+    developMode?: string
 }
 
 type WrapperProps = {
 	children: React.ReactNode;
 } 
+
+type Action = { type: "UPDATE" }
+
 
 function menuReducer(state: any, action: any) {
 
@@ -46,20 +49,20 @@ function menuReducer(state: any, action: any) {
   }
 }
 
-const MenuStateContext = createContext<MenuContext[]>([]); 
-const MenuDispatchContext = createContext<MenuContext[]>([]); 
+const MenuStateContext = createContext<MenuContext>(initialValue); 
+const MenuDispatchContext = createContext<Dispatch<Action> | null>(null); 
 
-// export function MenuProvider({children} : WrapperProps) {
-//   const[state, dispatch] = useReducer(menuReducer, initialValue);
+export function MenuProvider({children} : WrapperProps) {
+  const[state, dispatch] = useReducer(menuReducer, initialValue);
 
-//   return (
-//     <MenuStateContext.Provider value={state}>
-//       <MenuDispatchContext.Provider value={dispatch}>        
-//         {children}        
-//       </MenuDispatchContext.Provider>
-//     </MenuStateContext.Provider>
-//   );
-// }
+  return (
+    <MenuStateContext.Provider value={state}>
+      <MenuDispatchContext.Provider value={dispatch}>        
+        {children}        
+      </MenuDispatchContext.Provider>
+    </MenuStateContext.Provider>
+  );
+}
 
 export function useMenuState() {
   const context = useContext(MenuStateContext);

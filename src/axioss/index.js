@@ -1,15 +1,13 @@
 import axios from 'axios';
-import { admin_path } from './config';
 
 const API = {
-  axiosCall(endpoint, payload, method) {
-    endpoint = admin_path + endpoint;
+  axiosCall(endpoint, header, payload, method) {
     method = method ? method.toLowerCase() : 'get';
     let fn = axios[method];  
     if(!payload) {
-      return fn(endpoint);
+      return fn(endpoint, header);
     } else {
-      return fn(endpoint, payload);
+      return fn(endpoint, header, payload);
     } 
   }
 }
