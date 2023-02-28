@@ -20,7 +20,6 @@ import TableLine from 'tableline.png';
 import { useSelector } from 'react-redux';
 //redux + action
 import { getlist } from 'redux/reducerSlice' 
-import { StringifyOptions } from 'querystring';
 
 const TableHeaderCell = styled(TableCell)`
   line-height: 18px !important;
@@ -216,7 +215,7 @@ export default function EnhancedTable() {
         setData([...rows]);
       }
       else {
-        let temp = rows.filter((v: any) => (v.name || v[headCells[0].id] || v.user_id) && (v.name.includes(value) || v[headCells[0].id].includes(value) || v.user_id.includes(value)));
+        let temp = rows.filter((v: any) => (v.display_name ) && (v.display_name.includes(value)));
         setData([...temp]);
       }
     } 
@@ -272,8 +271,11 @@ export default function EnhancedTable() {
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+  React.useEffect(()=> {
+    setData(rows);
+  }, [rows]);
 
   return (
     <React.Fragment>

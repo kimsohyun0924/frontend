@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import TableLine from 'tableline.png';
 import Table_Search from 'Table_Search.svg';
@@ -6,7 +6,6 @@ import Table_Search from 'Table_Search.svg';
 import { useSelector } from 'react-redux';
 //redux + action
 import { getlist } from 'redux/reducerSlice' 
-
 
 interface orderbyName {
     name? : string;
@@ -123,13 +122,13 @@ export default function Table() {
             setSearchData([...count]);
           }
           else {
-            let temp = count.filter((v: { name: string | any[]; user_id: string | any[]; }) => (v.name) && (v.name.includes(value) ));
+            let temp = count.filter((v: { display_name: string | any[]; }) => (v.display_name) && (v.display_name.includes(value) ));
             setSearchData([...temp]);
           }
         } 
-      }
+    }
 
-      const onClick = (e: any) => {
+    const onClick = (e: any) => {
         const name = e.target.getAttribute('name');
         
         if(name) {
@@ -144,21 +143,25 @@ export default function Table() {
             setSearchData(count);
         }
         else {
-          setSearchData(count.slice().sort((a: any, b: any) => {
-            const x = a[sortBy];
-            const y = b[sortBy];
-            if(x < y) {
-              return sortOrder === 'asc' ? -1 : 1;
-            }
-            else if(x > y) {
-              return sortOrder === 'asc' ? 1 : -1;
-            }
-            else {
-              return 0;
-            }
-          }));
+            setSearchData(count.slice().sort((a: any, b: any) => {
+                const x = a[sortBy];
+                const y = b[sortBy];
+                if(x < y) {
+                return sortOrder === 'asc' ? -1 : 1;
+                }
+                else if(x > y) {
+                return sortOrder === 'asc' ? 1 : -1;
+                }
+                else {
+                return 0;
+                }
+            }));
         }
-      };
+    };
+
+    useEffect(() => {
+        setSearchData(count);
+    }, [count]);
 
     return (
         <React.Fragment> 

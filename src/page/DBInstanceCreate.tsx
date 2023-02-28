@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -6,10 +6,17 @@ import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import styled, { css } from 'styled-components';
 import { useMenuState } from 'data/MenuContext';
 import MainContainer from 'layouts/MainContainer';
+import DBInfo from 'page/DBInfo';
 
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+const steps = ['서버 선택', 'DB 구성 및 설정', 'Network 설정'];
+
+const Content = styled.div`
+  width: 100%;
+  padding: 15px 15px 0px 15px;
+`;
 
 export default function DBInstanceCreate() {
     const menuState = useMenuState();
@@ -49,7 +56,15 @@ export default function DBInstanceCreate() {
     };
 
     const handleStep = (step: number) => () => {
-        setActiveStep(step);
+        if(step === 0) {
+            setActiveStep(step);
+        }
+        if(step === 1) {
+            setActiveStep(step);
+        }
+        if(step === 2) {
+            setActiveStep(step);
+        }
     };
 
     const handleComplete = () => {
@@ -63,6 +78,12 @@ export default function DBInstanceCreate() {
         setActiveStep(0);
         setCompleted({});
     };
+
+    const selectComponent: any = {
+        0: <DBInfo />,
+        1: <DBInfo />,
+        2: <DBInfo />,
+      };
 
     return (
         <React.Fragment>
@@ -90,9 +111,10 @@ export default function DBInstanceCreate() {
                     </React.Fragment>
                     ) : (
                     <React.Fragment>
-                        <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-                        Step {activeStep + 1}
-                        </Typography>
+                        <div style={{padding: '20px 10px 20px 20px'}}>
+                        {  <Content>{selectComponent[activeStep]}</Content> }
+                        {/* Step {activeStep + 1} */}
+                        </div>
                         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Button
                             color="inherit"
