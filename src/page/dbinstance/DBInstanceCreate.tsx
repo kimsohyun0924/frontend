@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -9,9 +9,15 @@ import Typography from '@mui/material/Typography';
 import styled, { css } from 'styled-components';
 import { useMenuState } from 'data/MenuContext';
 import MainContainer from 'layouts/MainContainer';
-import DBInfo from 'page/DBInfo';
 
-const steps = ['서버 선택', 'DB 구성 및 설정', 'Network 설정'];
+import DBCreateInfo from 'page/dbinstance/DBCreateInfo';
+import DBCreateConfig from 'page/dbinstance/DBCreateConfig';
+import { DBCreateData } from 'data/initial_data';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { DBCreate } from 'redux/reducerSlice';
+
+const steps = ['서버 선택', 'DB 구성', 'DB 설정','Network 설정'];
 
 const Content = styled.div`
   width: 100%;
@@ -19,6 +25,8 @@ const Content = styled.div`
 `;
 
 export default function DBInstanceCreate() {
+    
+    const dispatch = useDispatch();
     const menuState = useMenuState();
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState<{
@@ -80,10 +88,14 @@ export default function DBInstanceCreate() {
     };
 
     const selectComponent: any = {
-        0: <DBInfo />,
-        1: <DBInfo />,
-        2: <DBInfo />,
+        0: <DBCreateInfo />,
+        1: <DBCreateConfig />,
+        2: <DBCreateInfo />,
       };
+    
+    useEffect(() => {
+        dispatch(DBCreate(DBCreateData));
+    }, []);
 
     return (
         <React.Fragment>

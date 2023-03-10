@@ -14,11 +14,12 @@ const initialValue = {
   accessKey: "",
   secretKey: "",
   developMode: "dev",
+  loginId: "ktclouddev@gmail.com",
 }
 
 type MenuContext = {
     menuOpen: boolean,
-    token?: string,
+    token?: string | null,
     dbaasStatus?: string,
     totalVM?: number,
     messageBoxFlag: boolean,
@@ -29,15 +30,18 @@ type MenuContext = {
     tierId?: string,
     accessKey?: string,
     secretKey?: string,
-    developMode?: string
+    developMode?: string,
+    loginId?: string
 }
 
 type WrapperProps = {
 	children: React.ReactNode;
 } 
 
-type Action = { type: "UPDATE" }
-
+type Action = { 
+                type: "UPDATE", 
+                data: MenuContext
+              }
 
 function menuReducer(state: any, action: any) {
 

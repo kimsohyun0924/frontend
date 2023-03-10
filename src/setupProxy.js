@@ -1,28 +1,3 @@
-// const { createProxyMiddleware } = require('http-proxy-middleware');
-
-// module.exports = function (app) {
-//     // admin 프록시 설정
-//     app.use(
-//         createProxyMiddleware('/local', {
-//             // target: 'http://localhost:8090',
-//             target: 'https://apigw-dev-admin.ktcloud.io',
-//             pathRewrite: {
-//                 '^/local': ''
-//             },
-//             changeOrigin: true
-//         })
-//     )
-//     app.use(
-//         createProxyMiddleware('/dev', {
-//             target: 'http://admin:8081',
-//             pathRewrite: {
-//                 '^/dev': ''
-//             },
-//             changeOrigin: true
-//         })
-//     )
-// };
-
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app){

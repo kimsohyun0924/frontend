@@ -4,21 +4,24 @@ import styled from 'styled-components';
 import { useMenuState } from 'data/MenuContext';
 import MainContainer from 'layouts/MainContainer';
 
+import { DBInstancecolumnData } from 'data/initial_data';
 import Button from 'component/button/Button';
-import Table from 'component/table/Table_example';
+import Table from 'component/table/Table_mui';
 import apis from 'axioss/apis';
 
-import { useDispatch } from 'react-redux';
-import { getList, getlist } from 'redux/reducerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getList, clickedData, checkedItem } from 'redux/reducerSlice';
 
 const ButtonDiv = styled.div`
     /* padding-top: 1rem; */
 `;
 
-export default function APIs() {
+export default function DBInstance() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const test = useSelector(checkedItem);
+  const detailInfo = useSelector(clickedData);
   const menuState = useMenuState();
   const [click, setClick] = useState(true);
 
@@ -28,7 +31,7 @@ export default function APIs() {
     // console.log(menuState.platformId);
     // console.log(menuState.tenantId);
     try {
-      apis.getDbaaSData(url, 'gAAAAABj_T_ohnguUsJurFkhovrURSDCXNTjxhxsFiVahsZ0o4Mqf7Wn2jkAWfsm_ovTLvYrwaYeGcTEtnzjqm265gX300PVFHZcTkpqLkYZjjqpibz69GxvgOGBd0mroCT5rJqr1xeU5rT5gVvz7XBiPkLt5y7YndAhAPVA1eP72tjsTpnJW-Q')
+      apis.getDbaaSData(url, 'gAAAAABkCsHfxDAj0-I7kI2dQrPhYiYvkAq0MR50sI311wWhEKk_QAlWul-EW7-NWWLMaeFPMaK5Zy8c7VI8K785jvNHgu2TyMhX4NHCkeuS4iRjWnwi08VaYm5wE-QC4Y9kEmnd3gLxuxosPs1Q67A8DmvuA0qUAmieA6R3t05_qFF_rNKUnyg')
         .then((res) => {
           dispatch(getList(res.data));
         })
@@ -56,7 +59,10 @@ return (
           <Button color='outline' name='재시작' size={15} loading='flase' disabled={click} onClick={onCreate}/>
           <Button color='outline' name='삭제' size={15} loading='flase' disabled={click} onClick={onCreate}/>
         </ButtonDiv>
-        <Table />
+        <Table/>
+        <div style={{padding: '50px 0px 50px 0px'}}>
+         {detailInfo.id}
+        </div>
       </MainContainer>
     </React.Fragment>
   );

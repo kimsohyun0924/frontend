@@ -9,7 +9,7 @@ import apis from 'axioss/apis';
 import { useDispatch, useSelector} from 'react-redux';
 
 //redux + action
-import { getlist, ClickedData, Checked } from 'redux/reducerSlice' 
+import { BackupData, Backupdata, ClickedData, Checked } from 'redux/reducerSlice' 
 
 interface orderbyName {
     name? : string;
@@ -75,12 +75,12 @@ const TD = styled.td`
     border-top: 1px solid #ccc;
 `;
 
-export default function Table({ columnData }: any) {
+export default function Table_backup({ columnData }: any) {
 
     const dispatch = useDispatch();
     const menuState = useMenuState();
 
-    const count = useSelector(getlist);
+    const count = useSelector(Backupdata);
     const [selectData, setSelectData] = useState({ id: null, });
     const [searchData, setSearchData] = useState(count);
     //useMemo사용하여 처음 한 번만 렌더됨
@@ -97,7 +97,7 @@ export default function Table({ columnData }: any) {
             setSearchData([...count]);
           }
           else {
-            let temp = count.filter((v: { display_name: string | any[]; }) => (v.display_name) && (v.display_name.includes(value) ));
+            let temp = count.filter((v: { dbaas_display_name: string | any[]; }) => (v.dbaas_display_name) && (v.dbaas_display_name.includes(value) ));
             setSearchData([...temp]);
           }
         } 
@@ -135,27 +135,16 @@ export default function Table({ columnData }: any) {
     };
 
     const onClick2 = (item: any) => {
-
+        console.log(item);
         if(item.id ===  selectData.id) {
             setSelectData({id : null});
-            dispatch(ClickedData([{id : null}]));
+            dispatch(ClickedData(item));
             dispatch(Checked(false));
         }
         else {
-            const dataFetch = async () => {
-                dispatch(Checked(true));
-                const url = `/dev/v1.0/${menuState.platformId}/paas/${menuState.tenantId}/dbaas/${item.id}`
-                try {
-                    apis.getDbaaSData(url, 'gAAAAABkCA1AU-JLZgmxWwPOUlYTJL_WWk2SuU3wjaUtxHduZXisc4BdlvyI-v7kkM00hjdNr0uldQtqZzYdSjTN5Q5EvD0ClZA9M0kWbgoSpWhtoZLxYim_tQaiFYGi6eHqESwxszwBUQ0quiOr7tXqgAk2_XAFbjowsN8REEA46xj3EkoDPVA')
-                    .then((res) => {
-                        setSelectData(res.data);
-                        dispatch(ClickedData(res.data));
-                    })
-                } catch(error) {
-                    console.log("async error : ", error);
-                }
-            };
-            dataFetch();
+            dispatch(Checked(true));
+            setSelectData(item);
+            dispatch(ClickedData(item));
         }
     };
 
@@ -178,7 +167,7 @@ export default function Table({ columnData }: any) {
             <TableDiv className="table">
                 <thead>
                     <tr>
-                        <TH style={{width:'1%'}}><input type="checkbox"/></TH>
+                        <TH style={{width:'1%'}}/>
                         { columns && columns.map((item: any, index: number) => {
                             return  (
                                 <React.Fragment key={index}>
@@ -194,20 +183,19 @@ export default function Table({ columnData }: any) {
                             <React.Fragment key={index}>
                                 <tr onClick={() => { onClick2(item) }} >
                                     <TD style={{width:'1%'}}><input type="checkbox" checked={selectData.id === item.id ? true : false} onChange={checkHandler}/></TD>
-                                    <TD>{item.display_name}</TD> 
-                                    <TD>{item.mysqlInfo.mode}</TD>  
-                                    { item.vmInfo.length > 0 ? <TD>{item.vmInfo[0].vm_flavor}</TD>  : <TD/> }
-                                    <TD>{item.storageInfo.volume_type}</TD> 
-                                    <TD>{item.zone.id}</TD> 
-                                    <TD>{item.create_completed_time}</TD>
-                                    <TD>{item.dbaas_status}</TD>
-                                    {/* { columns && columns.map((item2: any, index2: number) => { 
+                                    {/* <TD>{item.dbaas_display_name}</TD> 
+                                    <TD>{item.id}</TD>  
+                                    <TD>{item.period}</TD>  
+                                    <TD>{item.size}</TD> 
+                                    <TD>{item.create_date}</TD> 
+                                    <TD>{item.state}</TD> */}
+                                    { columns && columns.map((item2: any, index2: number) => { 
                                         return  (
                                             <React.Fragment key={index2}>
-                                                <TD>{item[item2]}</TD>  
+                                                <TD>{item[item2.id]}</TD>  
                                             </React.Fragment>
                                         );
-                                    })} */}
+                                    })}
                                 </tr>
                             </React.Fragment>
                         );                              

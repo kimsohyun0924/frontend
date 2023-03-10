@@ -26,19 +26,19 @@ const MenuProps = {
     },
 };
   
-export default function MultipleSelect({ dropdown, name }: any) {
+export default function MultipleSelect({ dropdown, name, name2 }: any) {
 
     const dispatch = useDispatch();
     const test = useSelector(DBcreate);
-    const [data, setData] = React.useState(test[0][name]);
+    const [data, setData] = React.useState(test[0][name][name2]);
 
     const handleChange = (event: SelectChangeEvent) => {
         setData(event.target.value as string);
 
-        if(name === 'version') {
-            dispatch(DBCreate_version(event.target.value));
+        if(name2 === 'vm_flavor') {
+            dispatch(DBCreate_vm_flavor(event.target.value));
         }
-        if(name === 'nodes') {
+        if(name === 'mysql') {
             dispatch(DBCreate_cluster_nodes(event.target.value));
         }
     };
